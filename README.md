@@ -2,7 +2,7 @@
 
 Copyright (c) 2026 Frederic G. Speyser & Kseniya Vyatkina
 
-**Interactive demonstrator:** [`2i-OTCA-C-v1.0-demo/index.html`](2i-OTCA-C-v1.0-demo/index.html)
+**Interactive demonstrator:** [[`2i-OTCA-C-v1.0-demo/index.html`](2i-OTCA-C-v1.0-demo/index.html)](https://k-f-research.github.io/two-impulse-transfer-cost-circular-orbits/2i-OTCA-C-v1.0-demo/index.html)
 -- open this file in a browser to compute transfers interactively, review
 the theoretical results, and read the Algorithms documentation, without
 installing anything.
