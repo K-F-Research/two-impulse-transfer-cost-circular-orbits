@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "otca-c"
+version = "0.1.0"
+description = "2i-OTCA-C -- Two-Impulse Orbital Transfer Cost Algorithm, Circular Case"
+authors = [{name = "Frederic G. Speyser"}, {name = "Kseniya Vyatkina"}]
+license = {text = "See repository root LICENSE-CODE.md (NCSL-1.0)"}
+requires-python = ">=3.9"
+dependencies = [
+    "numpy>=1.20",
+    "scipy>=1.7",
+    "sympy>=1.9",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=7.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
