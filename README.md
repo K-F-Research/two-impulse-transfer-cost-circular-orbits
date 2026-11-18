@@ -8,8 +8,7 @@ the theoretical results, and read the Algorithms documentation, without
 installing anything.
 
 This repository accompanies the paper *"Monotonicity, Convexity, and
-Curvature of the Optimal Two-Impulse Transfer Cost Between Circular Orbits"*
-, archived separately (see `CITATION.cff`). It
+Curvature of the Optimal Two-Impulse Transfer Cost Between Circular Orbits"*, archived separately (see `CITATION.cff`). It
 contains the mathematical proofs, their corresponding computational
 certificates, a reference software implementation
 (`2i-OTCA-C-v1.0-algorithm/`), and an interactive demonstrator
