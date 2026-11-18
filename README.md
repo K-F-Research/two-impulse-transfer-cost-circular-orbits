@@ -1,14 +1,20 @@
 # Two-Impulse Transfer Cost Between Circular Orbits
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/beyond_hohmann_600x600.gif">
+  <img src="assets/beyond_hohmann_600x600_light.gif" alt="Optimal two-impulse transfer cost as the transfer angle departs from the Hohmann configuration" width="500">
+</picture>
+
 Copyright (c) 2026 Frederic G. Speyser & Kseniya Vyatkina
 
-**Interactive demonstrator:** [[`2i-OTCA-C-v1.0-demo/index.html`](2i-OTCA-C-v1.0-demo/index.html)](https://k-f-research.github.io/two-impulse-transfer-cost-circular-orbits/2i-OTCA-C-v1.0-demo/index.html)
--- open this file in a browser to compute transfers interactively, review
+**Interactive demonstrator:** [2i-OTCA-C-v1.0-demo/index.html](https://k-f-research.github.io/two-impulse-transfer-cost-circular-orbits/2i-OTCA-C-v1.0-demo/index.html)
+-- open this link in a browser to compute transfers interactively, review
 the theoretical results, and read the Algorithms documentation, without
 installing anything.
 
 This repository accompanies the paper *"Monotonicity, Convexity, and
-Curvature of the Optimal Two-Impulse Transfer Cost Between Circular Orbits"*, archived separately (see `CITATION.cff`). It
+Curvature of the Optimal Two-Impulse Transfer Cost Between Circular Orbits"*
+(part of the 2i-OTC-C Study), archived separately (see `CITATION.cff`). It
 contains the mathematical proofs, their corresponding computational
 certificates, a reference software implementation
 (`2i-OTCA-C-v1.0-algorithm/`), and an interactive demonstrator
