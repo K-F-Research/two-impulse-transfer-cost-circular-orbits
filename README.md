@@ -9,7 +9,7 @@ installing anything.
 
 This repository accompanies the paper *"Monotonicity, Convexity, and
 Curvature of the Optimal Two-Impulse Transfer Cost Between Circular Orbits"*
-(part of the 2i-OTC-C Study), archived separately (see `CITATION.cff`). It
+, archived separately (see `CITATION.cff`). It
 contains the mathematical proofs, their corresponding computational
 certificates, a reference software implementation
 (`2i-OTCA-C-v1.0-algorithm/`), and an interactive demonstrator
