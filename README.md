@@ -1,11 +1,12 @@
 # Two-Impulse Transfer Cost Between Circular Orbits
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/beyond_hohmann_600x600.gif">
-  <img src="assets/beyond_hohmann_600x600_light.gif" alt="Optimal two-impulse transfer cost as the transfer angle departs from the Hohmann configuration" width="500">
-</picture>
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/beyond_hohmann_600x600.gif">
+    <img src="assets/beyond_hohmann_600x600_light.gif" alt="Optimal two-impulse transfer cost as the transfer angle departs from the Hohmann configuration" width="500">
+  </picture>
+</p>
 
-Copyright (c) 2026 Frederic G. Speyser & Kseniya Vyatkina
 
 **Interactive demonstrator:** [2i-OTCA-C-v1.0-demo/index.html](https://k-f-research.github.io/two-impulse-transfer-cost-circular-orbits/2i-OTCA-C-v1.0-demo/index.html)
 -- open this link in a browser to compute transfers interactively, review
