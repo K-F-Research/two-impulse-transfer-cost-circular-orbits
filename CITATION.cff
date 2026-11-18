@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite it as below."
+title: "Two-Impulse Transfer Cost Between Circular Orbits"
+authors:
+  - family-names: "Speyser"
+    given-names: "Frederic G."
+  - family-names: "Vyatkina"
+    given-names: "Kseniya"
+year: 2026
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.24354529"
+    description: "Zenodo archive of the paper"
+preferred-citation:
+  type: article
+  title: "Monotonicity, Convexity, and Curvature of the Optimal Two-Impulse Transfer Cost Between Circular Orbits"
+  authors:
+    - family-names: "Speyser"
+      given-names: "Frederic G."
+    - family-names: "Vyatkina"
+      given-names: "Kseniya"
+  year: 2026
+  publisher:
+    name: "Zenodo"
+  doi: "10.5281/zenodo.24354529"
+  url: "https://doi.org/10.5281/zenodo.24354529"
