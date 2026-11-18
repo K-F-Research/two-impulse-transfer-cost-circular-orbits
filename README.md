@@ -1,4 +1,4 @@
-# Two-Impulse Transfer Cost Between Circular Orbits
+# Monotonicity, Convexity, and Curvature of the Optimal Two-Impulse Transfer Cost Between Circular Orbits
 
 <p align="center">
   <picture>
