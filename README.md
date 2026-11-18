@@ -64,12 +64,11 @@ note` section of `STATUS.md` provides the full explanation.
 
 ## Scope
 
-This repository covers two-impulse, coplanar, impulsive-burn transfers
-between circular orbits only. It does not model or optimize elliptical-orbit
-transfers, orbital-plane changes, perturbations (e.g., J2), finite-duration
-or finite-thrust propulsion, or launch-window, phasing, or rendezvous
-constraints. It is a research software component, not a general-purpose
-mission planner.
+This repository focuses on the analysis and computation of two-impulse, coplanar, impulsive transfers between circular orbits. Within this scope, it provides the mathematical results, certified computational evidence, reference implementations, and software tools developed in the study to evaluate transfer cost and its dependence on the transfer angle.
+
+The models and algorithms are formulated for circular-orbit transfers and therefore cover the corresponding cost, optimization, curvature, and numerical-verification problems within this setting. The present scope excludes elliptical-orbit transfers, orbital-plane changes, perturbations such as J2, finite-duration or finite-thrust propulsion, and mission-level constraints such as launch windows, phasing, and rendezvous.
+
+The software is intended as a research and engineering component that can be integrated into broader mission-analysis workflows. Applications requiring these additional physical models or mission constraints should provide the corresponding modelling and optimization layers separately.
 
 ## License
 
@@ -85,6 +84,20 @@ This repository is dual-licensed:
 
 See `CITATION.cff`.
 
+Companion paper (the mathematical results themselves):
+
 > Speyser, F. G., & Vyatkina, K. (2026). *Monotonicity, Convexity, and
 > Curvature of the Optimal Two-Impulse Transfer Cost Between Circular
-> Orbits*. Zenodo. https://doi.org/10.5281/zenodo.24354529
+> Orbits*. Zenodo.  
+> [https://doi.org/10.5281/zenodo.24354529](https://doi.org/10.5281/zenodo.24354529)
+
+Software (the algorithms):
+
+> Speyser, F. G., & Vyatkina, K. (2026). *Two-Impulse Transfer Cost
+> Between Circular Orbits* (Version v1.0) [Computer software]. Zenodo.  
+> [https://doi.org/10.5281/zenodo.24355454](https://doi.org/10.5281/zenodo.24355453)
+
+
+---
+
+Copyright (c) 2026 Frederic G. Speyser & Kseniya Vyatkina
