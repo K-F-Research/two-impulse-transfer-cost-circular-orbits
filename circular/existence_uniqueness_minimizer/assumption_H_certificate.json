@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "result": "Assumption H",
+  "statement": {
+    "H1": "for every R>1 and every phi in (0,pi), the minimizer p*(phi,R) of p -> C(p,phi,R) is unique",
+    "H2": "at that minimizer, C_pp(p*(phi,R),phi,R) > 0",
+    "strengthening_actually_proved": "C_pp > 0 at every stationary point of C(.,phi,R), for every R>1 and every phi in (0,pi), not only at an assumed minimizer; this is what makes the uniqueness conclusion (H1) follow from the non-degeneracy result (H2), via the topological closure argument in lemma1_closure_stationary_point.py"
+  },
+  "proof": {
+    "method": "exact symbolic identities (sympy): a positive Laurent decomposition of S1+S2 and of the second derivative K/2, a three-term Cauchy-Schwarz inequality, a one-variable lemma proved by explicit factorization, a completed square, and a rationalization identity. No interval arithmetic, SOS solver, or Sturm sequence is used.",
+    "writeup": "assumption_H_proof.md",
+    "scripts": [
+      {
+        "file": "assumption_H_proof_certificate.py",
+        "role": "algebraic certificate, working directly in the substituted variables (w, z, u)",
+        "sha256": "c85503e99920ea68711b1875fbacc7c8d9f8d25c541a445ede67d493537bd82c",
+        "result": "all assertions pass; no error"
+      },
+      {
+        "file": "assumption_H_independent_verification.py",
+        "role": "from-scratch reconstruction of every algebraic step of the proof, starting from the manuscript's original S1, S2 formulas (Sec. 2-3) rather than from the already-substituted notation of assumption_H_proof_certificate.py",
+        "sha256": "69102b3170e29abac506e9e13884e8b7eeedf70c3218361af6aa5d05677cd5fc",
+        "result": "every identity confirmed exactly (symbolic difference zero), under the standing hypothesis 0<w<1, which is guaranteed by R>1"
+      }
+    ],
+    "both_scripts_re_executed": true
+  },
+  "numerical_corroboration": {
+    "status": "corroboration only, not part of the proof above",
+    "script": "lemma1_stress_test_2000_trials.py",
+    "scope": "2000 random (w,u) pairs, boundary-sign and decreasing-crossing checks",
+    "result": "0 boundary-sign failures, 0 decreasing-crossing detections on the coarse grid used by that script",
+    "sha256": "f6d24cce9f7dc5c4a9d509e8f0aaf577be2135af3c0788dc98887394e49a1b20"
+  },
+  "dependents": {
+    "lemma1_closure_stationary_point.py": {
+      "path": "circular/existence_uniqueness_minimizer/lemma1_closure_stationary_point.py",
+      "sha256": "43ba2d89c2050efd572f94f7636e04373f959a83456bda1ec544d3bc22b9009d",
+      "use": "invokes Assumption H's non-degeneracy result (C_pp > 0 at every stationary point) as the premise of its topological closure argument (part (ii) of that script's printed derivation)"
+    },
+    "theorem_4_05_upper_bridge": {
+      "path": "circular/theorem_4/05_upper_bridge/certificate/upper_bridge_certificate.json",
+      "field": "branch_identification_note.closure",
+      "use": "cites the global existence and uniqueness of p*(phi,R) (established via Assumption H plus lemma1_closure_stationary_point.py) to close the obligation that the certified Hohmann tile family represents the entire physical stationary branch segment it covers",
+      "notational_correspondence": "the correspondence between this folder's substituted variables (s or z := sqrt(p), w := R^(-1/2), q := cot(phi/2)) and the Hohmann bridge's native (p, phi, t) variables is checked numerically in theorem_4/05_upper_bridge's own certificate (field branch_identification_note.closure.notational_correspondence_check), not re-derived here"
+    }
+  },
+  "provenance": {
+    "readme": {
+      "file": "README.md",
+      "sha256": "f1e711d83e394e24205287c065c5687918063aa919131de330a52bb5cbb7ec93"
+    },
+    "software_versions": {
+      "python": "3.13.18",
+      "sympy": "1.14.0",
+      "mpmath": "1.3.0"
+    },
+    "auditor": {
+      "status": "pending",
+      "path": null
+    }
+  }
+}

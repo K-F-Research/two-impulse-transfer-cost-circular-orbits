@@ -1,0 +1,223 @@
+{
+  "schema_version": "1.0",
+  "theorem": "Theorem 4",
+  "model": "R=2",
+  "region_id": "04_hohmann_endpoint",
+  "parameterization": {
+    "name": "t",
+    "definition": "sin(phi/2)^2",
+    "domain": {
+      "lower": "0",
+      "lower_open": true,
+      "upper": "0.0001000000000000000000000000000000000000000000000000000211419864763152195",
+      "upper_open": false,
+      "upper_note": "this is hohmann_full_mesh_archive.json's own recorded domain_T[0] (the 05_upper_bridge mesh's first tile's t_lo), used here verbatim rather than the bare literal 1e-4, so that the two certificates' domains meet with zero gap as an exact rational equality (see 'upper_boundary_exactness' below), not merely within a tolerance. The resulting interval bounds below are recomputed at mp.iv.dps=90 / mp.mp.dps=90 (raised from 50/60 solely so that this ~75-digit decimal string is parsed losslessly as mp.mpf, confirmed by Fraction(str(mp.mpf(domain_T0))) == Fraction(domain_T0)); the previous dps=50/60 values, computed against the bare literal 1e-4, agreed with these to over 50 significant digits, since the shift in the upper bound is of order 1e-56."
+    },
+    "upper_boundary_exactness": {
+      "check": "Fraction(t0_as_parsed_mpf_string) == Fraction(archive_domain_T0_string)",
+      "arithmetic": "exact rational (Python fractions.Fraction), independent of any floating-point or mp.mpf precision",
+      "result": true,
+      "note": "this supersedes the earlier mp.mpf-equality argument (which only establishes equality of in-memory generation-time objects, not of the archived decimal string) and the SECURITY_EPS=1e-40 tolerance check used elsewhere in this project; here the two boundary values are shown to be identical as exact rationals, not merely close."
+    }
+  },
+  "definitions": {
+    "angle_map": "phi(t) = 2*arcsin(sqrt(t))",
+    "branch_map": "p(t,a) = 4/3 + a*t",
+    "Ghat": "Ghat(t,a) = C_p( p(t,a), phi(t) )",
+    "Hhat": "Hhat(t,a) = H( p(t,a), phi(t) )",
+    "Cpphat": "Cpphat(t,a) = C_pp( p(t,a), phi(t) )",
+    "note": "C_p, H, C_pp here are the original functions of (p, phi); Ghat, Hhat, Cpphat are their pullbacks along the explicit maps p(t,a) and phi(t) above. t is never passed directly as the angular argument of C_p, H, or C_pp."
+  },
+  "branch": {
+    "equation": "Ghat(t,a) = 0",
+    "existence": {
+      "certified": true,
+      "domain": "0 <= t <= 1e-4, a in [-0.25, 0.25]",
+      "method": "opposite signs of Ghat at the two a-boundaries, for every t in the domain",
+      "evidence": {
+        "Ghat_at_a_minus_0_25": {
+          "upper": {
+            "decimal": "-1.03393696495368982428628577255965072417258565238601905253953",
+            "rounding": "up"
+          },
+          "sign": "negative"
+        },
+        "Ghat_at_a_plus_0_25": {
+          "lower": {
+            "decimal": "1.93568701995505760068824043316600205284683360199835248485763",
+            "rounding": "down"
+          },
+          "sign": "positive"
+        }
+      }
+    },
+    "uniqueness": {
+      "certified": true,
+      "domain": "0 <= t <= 1e-4, a in [-0.25, 0.25]",
+      "method": "strict monotonicity of Ghat in a, via t*Cpphat > 0 on the full box",
+      "monotonicity_identity": {
+        "statement": "d(Ghat)/da = t*Cpphat, exactly (no extra factor), using Ghat and Cpphat as defined in 'definitions' above",
+        "verified_by": "audit_transformations_R2.py, check [3] 'dGhat/da = tCpphat'",
+        "result": "PASS (symbolic identity, exact, not an interval bound)",
+        "validity": "this identity is an identity of the regularized expressions, valid including t = 0: the interval box evaluated below is Bt_full = [0, 1e-4] (closed), so t*Cpphat is certified positive on this closed box directly, with no separate limiting argument needed for the monotonicity/uniqueness conclusion itself (contrast with the standalone Cpp field below, which does require such an argument at t=0)."
+      },
+      "evidence": {
+        "t_Cpphat_lower_bound": {
+          "decimal": "5.93881264140254871822526127620421324421298113471635006407047",
+          "rounding": "down"
+        },
+        "t_Cpphat_upper_bound": {
+          "status": "not_computed",
+          "reason": "a lower bound strictly above 0 is sufficient to establish strict positivity"
+        },
+        "domain": "t in [0, 1e-4] (closed, t=0 included), a in [-0.25, 0.25]"
+      },
+      "note": "Existence (sign change of Ghat at the a-boundaries) and uniqueness (strict monotonicity of Ghat in a) are two distinct arguments; uniqueness additionally requires the exact identity above linking d(Ghat)/da to t*Cpphat, not merely that both quantities happen to be positive."
+    },
+    "enclosure": {
+      "parameter": "t",
+      "dependent_variable": "a (root of Ghat(t,.) = 0)",
+      "representation": "existence+uniqueness box, not a refined point enclosure in this region"
+    }
+  },
+  "radicands": {
+    "S1": {
+      "strictly_positive": true,
+      "domain": "0 <= t <= 1e-4, a in [-0.25, 0.25]",
+      "lower_bound": {
+        "decimal": "0.0235824769598825820465976557504901332016441593761381597397709",
+        "rounding": "down"
+      },
+      "upper_bound": {
+        "status": "not_computed",
+        "reason": "a lower bound strictly above 0 is sufficient to certify strict positivity; the upper bound is not computed by this certificate, not merely omitted by oversight"
+      }
+    },
+    "S2": {
+      "strictly_positive": true,
+      "domain": "0 <= t <= 1e-4, a in [-0.25, 0.25]",
+      "lower_bound": {
+        "decimal": "0.0167072204620953081733155274894956881855338427074206143664813",
+        "rounding": "down"
+      },
+      "upper_bound": {
+        "status": "not_computed",
+        "reason": "a lower bound strictly above 0 is sufficient to certify strict positivity; the upper bound is not computed by this certificate, not merely omitted by oversight"
+      }
+    }
+  },
+  "H": {
+    "definition": "H(p,phi) = C_phiphi(p,phi) * C_pp(p,phi) - C_pphi(p,phi)^2",
+    "rescaled_quantity": {
+      "name": "PHhat",
+      "definition": "PHhat(t,a) = t * Hhat(t,a) = t * H( p(t,a), phi(t) )",
+      "factor": "t",
+      "factor_positive_on_domain": true,
+      "factor_domain": "0 < t <= 1e-4 (strict; t = 0 is excluded and treated separately, see endpoint_limit below)"
+    },
+    "sign": "positive",
+    "method": "subdivision of the a-interval into n_a=100 sub-boxes; full box without subdivision does not give a positive lower bound",
+    "evidence": {
+      "full_box_no_subdivision": {
+        "status": "inconclusive",
+        "lower": {
+          "decimal": "-1.071870227648548518350490275051690908804700358664487268",
+          "rounding": "down"
+        },
+        "upper": {
+          "decimal": "4.045040863821400297159348126326121783057071468191953697",
+          "rounding": "up"
+        },
+        "conclusion": "interval straddles 0; not a sign certificate and not used as the retained one"
+      },
+      "subdivided_n_a_100": {
+        "n_a": 100,
+        "worst_case_subbox": "a in [0.245, 0.25]",
+        "certified_lower_bound": {
+          "decimal": "1.06124211168",
+          "rounding": "down"
+        },
+        "n_failures": 0,
+        "all_subbox_bounds_archived_in": "hohmann_endpoint_H_subdivision_n100.json"
+      }
+    },
+    "certified_lower_bound": {
+      "decimal": "1.06124211168",
+      "rounding": "down"
+    }
+  },
+  "Cpp": {
+    "definition": "C_pp(p,phi)",
+    "rescaled_quantity": {
+      "name": "tCpphat",
+      "definition": "tCpphat(t,a) = t * Cpphat(t,a) = t * C_pp( p(t,a), phi(t) )",
+      "factor": "t",
+      "factor_positive_on_domain": true,
+      "factor_domain": "0 < t <= 1e-4 (strict, for the standalone C_pp conclusion below)"
+    },
+    "certified_lower_bound": {
+      "decimal": "5.93881264140254871822526127620421324421298113471635006407047",
+      "rounding": "down"
+    },
+    "upper_bound": {
+      "status": "not_computed",
+      "reason": "a lower bound strictly above 0 is sufficient to certify strict positivity"
+    },
+    "conclusion": "C_pp > 0 for t > 0 on this domain",
+    "conclusion_domain": "0 < t <= 1e-4",
+    "note": "This bound does not by itself establish C_pp > 0 at t = 0, since C_pp alone (unlike t*Cpphat) is not evaluated at t=0 without dividing by t; the limiting point is covered by the endpoint expansion (see endpoint_limit), not by this interval box. This is a strictly narrower domain than the branch.uniqueness conclusion above, which already holds on the closed box t in [0, 1e-4] because it uses t*Cpphat directly, not C_pp in isolation."
+  },
+  "endpoint_limit": {
+    "parameter": "t",
+    "quantity": "t*Hhat",
+    "limit_expression": "(105 + 81*sqrt(2) + 63*sqrt(3) + 45*sqrt(6)) / 256",
+    "limit_decimal_positive": true,
+    "role": "asymptotic consistency check; not used as a substitute for the interval sign certificate on 0 < t <= 1e-4 above"
+  },
+  "junctions": [
+    {
+      "junction_id": "J_HOHMANN_UPPER_BRIDGE",
+      "parameter_value": "1e-4",
+      "verification": "strict inclusion of the upper-bridge first tile's a-box in this region's a-box, at the shared boundary t = 1e-4, plus independent re-verification of both existence/uniqueness certificates",
+      "certified": true,
+      "certifying_script": "hohmann_raccord_t1e4.py",
+      "result": "15/15 checks passed"
+    }
+  ],
+  "provenance": {
+    "generator": "hohmann_certificate_v3.py",
+    "generator_sha256": "3802c9e8922f648f9a177412cb9c4cc15174408c9f70d0f20ad0290e01be2d6f",
+    "generator_sha256_note": "SHA-256 of the deposited English-language script. The originally-executed script (identical logic and numeric outputs, French print labels) hashed to a7363d96b87dd250c8e696c75db39e982205a62b2a7c21bf80f8036507885efc; the deposited script was re-run in this session and reproduces every reported bound exactly (S1, S2, t*Cpp, boundary signs, and the n_a=50/100/200 t*H subdivision search all identical).",
+    "certificate_file": "04_hohmann_endpoint/certificate/hohmann_endpoint_certificate.json",
+    "certificate_sha256_note": "computed over this file with this field set to the empty string, then inserted below",
+    "certificate_sha256": "30b40bdc9ad6a61c2aa8823fbf38a82bf2eeb8e550a6dbe8f133ea4f0ce3224a",
+    "auditor": {
+      "status": "pending",
+      "path": null
+    },
+    "arithmetic": "validated interval arithmetic (mpmath mp.iv)",
+    "precision": {
+      "mp_iv_dps": 90,
+      "mp_mp_dps": 90,
+      "precision_note": "raised from 50/60 to 90 solely to losslessly parse the ~75-digit archived domain_T0 decimal string used as this region's upper boundary (see parameterization.domain.upper_note); the resulting bounds agree with the original dps=50/60 computation (against the bare literal 1e-4) to over 50 significant digits"
+    },
+    "software_versions": {
+      "python": "3.13.18",
+      "sympy": "1.14.0",
+      "mpmath": "1.3.0"
+    }
+  },
+  "artifacts": {
+    "readme": {
+      "file": "README.md",
+      "sha256": "1d21a499bf420cfa8f839b552d04e1e46e12e5f61f527bad8e5ef295f34799b9"
+    },
+    "supporting_scripts": [
+      {
+        "file": "hohmann_w_bound_exact.py",
+        "sha256": "58179903bb8d882845b5c0fdd261db99b42b95eea81ebb2489ca06f9f92c2338",
+        "role": "independent exact-arithmetic check that the upper-bridge junction's w_- lower bound (at t=t_archive) is strictly below w_H=sqrt(4/3); not one of the sign-certificate scripts above, supports the parameterization.domain.upper_note explanation of why t_archive is used verbatim instead of the bare literal 1e-4"
+      }
+    ]
+  }
+}

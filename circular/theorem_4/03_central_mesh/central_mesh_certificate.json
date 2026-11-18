@@ -1,0 +1,131 @@
+{
+  "certificate_id": "theorem_4_03_central_mesh",
+  "theorem": "Theorem 4",
+  "model": "R=2",
+  "region_id": "03_central_mesh",
+  "status": "closed_pending_independent_audit",
+  "domain": {
+    "parameter": "w",
+    "definition": "w := sqrt(p)",
+    "lower": "0.15",
+    "upper": "1.144701",
+    "lower_open": false,
+    "upper_open": false,
+    "note": "This region works directly in the native (p,phi) variables of the cost model; w is used only to describe the domain and report results."
+  },
+  "definitions": {
+    "C": "C(p,phi) = sqrt(S1) + sqrt(S2), the two-impulse cost function (R=2, native variables)",
+    "H": "H(p,phi) = C_phiphi * C_pp - C_pphi^2, the curvature determinant",
+    "K_1": "a Krawczyk interval-certified isolated zero (p_c, phi_c) of the stationary branch, around which the two walks are built"
+  },
+  "claims": {
+    "K_1_certified": {
+      "status": "verified",
+      "method": "Krawczyk interval test on a box of half-width 1e-7 around a Newton-refined root, with the preconditioner Y=J0^-1 itself certified non-singular by an interval enclosure of det(Y) strictly separated from 0",
+      "script": "mesh_certificate_R2_v6.py",
+      "result": "Krawczyk re-check at eps=1e-7: True; |det(J0)| ~ 2.07e4 (diagnostic); det(Y) interval strictly separated from 0 (certificate)"
+    },
+    "H_negative_down_walk": {
+      "status": "verified",
+      "method": "interval arithmetic (mpmath mp.iv): per-tile mean-value enclosure of H with certified Taylor remainder, interval-Newton branch root, explicit S1>0/S2>0 checks, tile-to-tile continuity by enclosure intersection",
+      "script": "mesh_certificate_R2_v6.py",
+      "result": "2052 tiles from the K_1 edge down to w=0.15, constant sign H<0 throughout, 2051 boundary checks all passed"
+    },
+    "H_positive_up_walk": {
+      "status": "verified",
+      "method": "same method as above",
+      "script": "mesh_certificate_R2_v6.py",
+      "result": "3090 tiles from the K_1 edge up to w=1.144701, constant sign H>0 throughout, 3089 boundary checks all passed"
+    },
+    "unique_sign_change": {
+      "status": "verified",
+      "note": "the DOWN walk's sign set is {-1} and the UP walk's is {+1}; both walks originate from the single Krawczyk-certified isolated root K_1; H therefore changes sign exactly once on [0.15, 1.144701], at K_1"
+    },
+    "S1_S2_positive_every_tile": {
+      "status": "verified",
+      "method": "explicit interval check on the full box of every tile (not only implicit via a sqrt exception)",
+      "script": "mesh_certificate_R2_v6.py",
+      "result": "5460 checks passed, 0 failed, across both walks"
+    },
+    "junction_with_02_lower_bridge": {
+      "status": "verified",
+      "note": "02_lower_bridge's domain is [0.00015, 0.15] (H<0, closed at both ends); this region's DOWN walk is certified down to exactly w=0.15 with H<0 throughout. The two regions meet at w=0.15 under the same definition of H; see proof/central_mesh_proof.md, Section 6."
+    },
+    "junction_with_05_upper_bridge": {
+      "status": "verified",
+      "note": "certified in theorem_4/05_upper_bridge's own certificate (junction J_UPPER_BRIDGE_CENTRAL_MESH, script hohmann_central_join.py): non-empty overlap of the p-boxes and phi-boxes at the shared boundary w=1.144701 between this region's last UP-walk tile and 05_upper_bridge's last tile, with strict sign of C_pphi on the overlap giving uniqueness of phi at fixed p, and existence certified on both sides for every p in the overlap. Not re-derived here; see theorem_4/05_upper_bridge/certificate/upper_bridge_certificate.json."
+    }
+  },
+  "method": {
+    "analytic": false,
+    "interval_arithmetic": true,
+    "floating_point_stress_test_is_proof": false,
+    "distinction": "every certified quantity in this region (branch root enclosures, S1/S2 positivity, the sign of H on each tile, the Krawczyk non-singularity certificate) is obtained by interval arithmetic (mpmath mp.iv, working precision 50 digits; extractions to plain values performed only at 60 digits, strictly above the interval precision, so every extraction is exact). No step relies on an exact symbolic identity or on an uncertified floating-point computation."
+  },
+  "dependencies": [
+    "theorem_4/02_lower_bridge (shares the junction point w=0.15 under the same definition of H)",
+    "theorem_4/05_upper_bridge (shares the junction point w=1.144701, certified in 05_upper_bridge's own certificate)"
+  ],
+  "artifacts": {
+    "proof": "proof/central_mesh_proof.md",
+    "scripts": [
+      {
+        "file": "scripts/mesh_certificate_R2_v6.py",
+        "sha256": "089ac5496acf300b81bbf8d24a07904115e5efa111ca501a823110cbebc5cd10",
+        "role": "builds the adaptive mesh in both directions from the Krawczyk-certified K_1 box and certifies the sign of H on every tile"
+      }
+    ],
+    "archive": {
+      "file": "archive/mesh_certificate_R2_v6_log.txt",
+      "sha256": "6ee71ef078e4cc16e983f27e9fded08d368c991a3c5addf44ac40f9af4a68f84",
+      "role": "complete execution trace of the Krawczyk certificate and both walks"
+    },
+    "readme": {
+      "file": "README.md",
+      "sha256": "09e665804b20b1a795e865cde8fa7150bb4acaecce41622faa7d662016404208"
+    },
+    "proof_document": {
+      "file": "proof/central_mesh_proof.md",
+      "sha256": "157eb01eba1c46528b3829defe1a05666ebaf38062e5368a81ad7d06426c99df"
+    }
+  },
+  "results": {
+    "n_tiles_down": 2052,
+    "n_tiles_up": 3090,
+    "sign_down": -1,
+    "sign_up": 1,
+    "H_range_down": [
+      "-578.5558027",
+      "-4.053257038e-5"
+    ],
+    "H_range_up": [
+      "4.053238745e-5",
+      "8.595688102"
+    ],
+    "n_boundary_checks_down": 2051,
+    "n_boundary_checks_up": 3089,
+    "s1s2_checks_passed": 5460,
+    "s1s2_checks_failed": 0,
+    "det_J0": "-20677.98357857533331",
+    "det_Y_interval": [
+      "-0.00004836061486363254753638581809237961467573305242856911625",
+      "-0.00004836061486363254753638581809237961467573305242856389601"
+    ],
+    "mp_mp_dps": 60,
+    "mp_iv_dps": 50
+  },
+  "auditor": {
+    "status": "pending",
+    "path": null
+  },
+  "provenance": {
+    "software_versions": {
+      "python": "3.13.18",
+      "sympy": "1.14.0",
+      "mpmath": "1.3.0"
+    },
+    "certificate_file": "03_central_mesh/certificate/central_mesh_certificate.json",
+    "certificate_sha256_note": "computed over this file with this field set to the empty string, then inserted below",
+    "certificate_sha256": "6b6797386da0110ce5baace6c4eee70a53ddcbf88930ef6bcb9edcfa4d0fa185"
+  }
+}

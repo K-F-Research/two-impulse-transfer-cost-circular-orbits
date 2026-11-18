@@ -1,0 +1,33 @@
+Refined root: p_c = 0.0942372201038584147638973774346850330168930813455320781919192  phi_c = 2.86881604632355948264049573342479653439827602706950871911284  w_c = 0.306980813901876308716591517415813776545712026797039636565843
+
+Krawczyk preconditioner J0 = [ 69.8176902869612831275972320647892714513282370130633473398854  51.3482929038272287603709315015533106934617962146510765535147]
+[-14007.9797697529601636747788500738409121296864107290057920362  -10598.514914277072135125515909521011632745098421083024995213]
+det(J0) = -20677.9835785753333098589923597251397640598467464146699805252  |det(J0)| = 20677.9835785753333098589923597251397640598467464146699805252
+Krawczyk preconditioner non-singular (|det(J0)| > 0.000001): PASS (floating-point diagnostic only -- see the interval certificate below)
+det(Y) interval = [-0.00004836061486363254753638581809237961467573305242856911625, -0.00004836061486363254753638581809237961467573305242856389601]  (Y = J0^-1, the preconditioner used)
+Preconditioner Y=J0^-1 non-singular (interval certificate, det(Y) strictly separated from 0): PASS
+
+Krawczyk re-check at eps=1e-7: True
+K_1 (rebuilt, eps=1e-7) edges: w_lo=0.306980651025204542554804388093645823472607040819467619479604  w_hi=0.306980976778461656460911810468050558140482032920939162941821
+
+Walking DOWN from K_1 edge to w=0.15 ...
+  tiles=2052, signs={-1}, time=279.9s, H range=[-578.556,-4.05326e-5], boundary_checks=2051
+[CHECKPOINT] DOWN walk saved to /tmp/mesh_v6_checkpoint_down.pkl
+
+Walking UP from K_1 edge to w=1.144701 ...
+  tiles=3090, signs={1}, time=408.3s, H range=[4.05324e-5,8.59569], boundary_checks=3089
+[CHECKPOINT] UP walk saved to /tmp/mesh_v6_checkpoint_up.pkl
+
+=== SUMMARY ===
+Exactly one sign change confirmed (inside K_1), consistent with the proof document.
+Tile-to-tile branch continuity certified throughout both walks (fix C): 5140 boundary checks, all passed (else RuntimeError would have aborted).
+All point-values (Cp0, H0, F0) interval-evaluated end-to-end (fix B).
+mp.iv.dps = 50 (fix A).
+S1,S2 > 0 explicitly checked on EVERY tile (fix D): 5460 passed, 0 failed (failed tiles were rescaled/retried, not silently accepted).
+Krawczyk preconditioner det(J0) = -20677.9835785753333098589923597251397640598467464146699805252, |det(J0)| = 20677.9835785753333098589923597251397640598467464146699805252 (fix E v3, floating-point diagnostic only).
+Krawczyk preconditioner det(Y) interval = [-0.00004836061486363254753638581809237961467573305242856911625, -0.00004836061486363254753638581809237961467573305242856389601] (fix F v4, interval certificate of non-singularity for the preconditioner actually used Y=J0^-1): PASS.
+mp.mp.dps = 60 > mp.iv.dps = 50 (fix G v4: mp.mpf(endpoint) conversions without loss of precision).
+Taylor remainder (Hp_mag, Hphi_mag, remainder) computed entirely in mp.iv directed-rounding arithmetic, exact final extraction (fix H v5).
+Disk checkpointing per half-mesh (DOWN then UP), automatically re-read on restart (fix I v6).
+
+Result saved to mesh_certificate_R2_v6_result.pkl

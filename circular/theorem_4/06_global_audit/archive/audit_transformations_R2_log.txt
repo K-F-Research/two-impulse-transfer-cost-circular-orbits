@@ -1,0 +1,36 @@
+
+=== 1. Transformations de variables ===
+[PASS] x = 1 - 2t
+[PASS] sin(phi)^2 = 4t(1-t)
+[PASS] 4 (dt/dphi)^2 = 4t(1-t)
+[PASS] d2t/dphi2 = (1-2t)/2
+
+=== 2. Hessien : conventions x et t ===
+[PASS] H_x(p,1-2t) = H_t(p,t)
+[PASS] Ct = -2 Cx
+[PASS] Ctt = 4 Cxx
+[PASS] Cpt = -2 Cpx
+
+=== 3. Regularisation Hohmann ===
+[PASS] Ghat = Cp(pH+at,t)
+[PASS] dGhat/da = tCpphat
+[PASS] dGhat/dt = aCpp + Cpt
+
+=== 4. Assemblage de tHhat ===
+[PASS] tHhat = t*H(pH+at,t)
+[PASS] Formule developpee de tHhat
+
+=== 5. Limite Hohmann L(a) ===
+[PASS] L(a) = A^2(4/81-a^2/4)
+A_lim exact = (27*sqrt(15 - 6*sqrt(6))/64 + 27*sqrt(42 - 24*sqrt(3))/64)/(sqrt(5 - 2*sqrt(6))*sqrt(7 - 4*sqrt(3)))
+L(a) exact  = 9*(16 - 81*a**2)*(sqrt(3)*sqrt(5 - 2*sqrt(6)) + sqrt(6)*sqrt(7 - 4*sqrt(3)))**2/(16384*(5 - 2*sqrt(6))*(7 - 4*sqrt(3)))
+
+============================================================
+BILAN AUDIT TRANSFORMATIONS R=2
+============================================================
+PASS : 14
+FAIL : 0
+
+ALL TESTED SYMBOLIC IDENTITIES VERIFIED
+
+ATTENTION : cet audit symbolique ne remplace pas les certificats d'intervalles.

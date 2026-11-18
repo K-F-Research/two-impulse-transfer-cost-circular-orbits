@@ -1,0 +1,10 @@
+Controle numerique haute precision (dps=60) : tHhat_construit vs t*H direct
+(route INDEPENDANTE : H direct differencie S1t,S2t substituees en p=pH+at,
+ sans passer par S1h/S2h/tCpphat/tCpthat/tCtthat deja construits)
+
+
+Points testes: 40  (tentatives: 40)
+Points avec accord a 1e-45 relatif ou mieux: 40/40
+Pire ecart relatif observe: 1.90494727054881034358431663261544978765188846936591932307576e-55
+
+RESULTAT: PASS (controle numerique, pas une preuve symbolique)

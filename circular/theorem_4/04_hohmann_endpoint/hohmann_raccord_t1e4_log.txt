@@ -1,0 +1,49 @@
+=== 1. Equality of the t = 1e-4 boundary ===
+[PASS] t0_local == t_lo_mesh within SECURITY_EPS = 1e-40  (t0_local=0.0001  t_lo_mesh=0.000100000000000000000000000000000000000000000000000000021141986  diff=2.1141986473975511573986138502613807185251705953343405633334e-56)
+
+=== 2. Strict inclusion of the a-box ===
+[PASS] [a_lo_mesh, a_hi_mesh] strictly contained in [a_lo_local, a_hi_local]  (mesh=[-0.105251359086393056830126117640087017812272676444648786944864, -0.0452513590863930568301261176400870178122726764446487468533929]  local=[-0.25, 0.25])
+
+=== 3. Identity of the frozen expressions (SHA-256) ===
+[PASS] common keys between hohmann_regular_exprs.pkl and hohmann_FROZEN_v1.pkl non-empty  (common keys: ['Ghat', 'Ghat_a', 'S1_hat', 'S2_hat', 'tHhat'])
+  [Ghat] sha_local=dd1035d935ee1daa...  sha_frozen=dd1035d935ee1daa...  identical(SHA)=True  identical(symbolic)=True
+  [Ghat_a] sha_local=8c1113ac1589d34f...  sha_frozen=8c1113ac1589d34f...  identical(SHA)=True  identical(symbolic)=True
+  [S1_hat] sha_local=f3308ec75a472e58...  sha_frozen=f3308ec75a472e58...  identical(SHA)=True  identical(symbolic)=True
+  [S2_hat] sha_local=b6ef742a9ea2efe7...  sha_frozen=b6ef742a9ea2efe7...  identical(SHA)=True  identical(symbolic)=True
+  [tHhat] sha_local=79cee77ee616c811...  sha_frozen=79cee77ee616c811...  identical(SHA)=True  identical(symbolic)=True
+[PASS] all common expressions are identical (SHA-256 or symbolically)
+[PASS] global FROZEN fingerprint matches the one archived in hohmann_full_mesh_archive.json  (archive=ddee30b7fd981372...  recomputed=ddee30b7fd981372...)
+
+=== 4. Independent re-verification of both certificates ===
+[PASS] local: S1, S2 > 0 on the full box
+[PASS] local: t*Cpp > 0 on the full box (monotonicity => uniqueness at fixed t)  (tCpp in [5.938812641402548718225261276204213244212981134714334021, 6.011654712279879839553465949033650268303778005690961505])
+[PASS] local: Ghat(., a_lo) < 0 for all t in [0, 1e-4]  ([-1.055780138932034308791664152837404664807403461203689881, -1.033936964953689824286285772559650724172585652385638008])
+[PASS] local: Ghat(., a_hi) > 0 for all t in [0, 1e-4]  ([1.935687019955057600688240433166002052846833601997991329, 1.951280333226064798435310622311310379361575381357437905])
+  [info] t*Hhat on the full box [0,1e-4]x[-0.25,0.25] (no subdivision): [-1.071870227648548518350490275051690908804700358665331862, 4.045040863821400297159348126326121783057071468192798291]
+  (expected: the full box loses the t-a correlation and does not yield a
+   positive lower bound; the retained sign certificate subdivides the
+   a-interval, see below. Existence and uniqueness of the root do not
+   depend on this subdivision.)
+[PASS] local: t*Hhat > 0 on [0,1e-4]x[-0.25,0.25] after subdivision in a (n_a=100)  (min over the 100 sub-boxes = 1.06124211168)
+[PASS] mesh (first tile): S1, S2 > 0
+[PASS] mesh (first tile): t*Cpp > 0 (uniqueness at fixed t)  ([5.846026505861341469547930564130268108034294850443926294, 6.096481429655689377647249805183250881697271003991069646])
+[PASS] mesh (first tile): Ghat(., a_lo) < 0  ([-0.2232031822437318100060469715420603421830168365196663228, -0.1367357753826643968119650848138098351819561762948385063])
+[PASS] mesh (first tile): Ghat(., a_hi) > 0  ([0.1396246790043324547380753351137025090129933065493174426, 0.2172115234380585675622411449912674779845207523651630375])
+[PASS] mesh (first tile): t*Hhat > 0  ([1.246322662444403298345236616196900328841835593019172525, 2.165382740460513661327604345035208996529068565799122325])
+
+============================================================
+SUMMARY: junction at t = 1e-4 (local Hohmann certificate <-> mesh)
+============================================================
+PASS: 15
+FAIL: 0
+
+ALL REQUIRED CHECKS PASSED.
+
+Conclusion: the local certificate (t in [0,1e-4], a in [-0.25,0.25])
+proves existence and uniqueness of a root of Ghat(t,.) = 0 on the full
+box, for every t in the closed domain, including t = 1e-4. The first
+mesh tile (t in [1e-4, 0.0006], a in [-0.10525136,-0.045251359])
+proves existence of a root in an a-box strictly contained in the local
+certificate's box, at the same t = 1e-4. By inclusion, this root is
+necessarily the local certificate's unique root: the two constructions
+describe the same continuous branch at the boundary t = 1e-4.

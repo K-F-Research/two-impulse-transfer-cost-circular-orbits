@@ -1,0 +1,63 @@
+=== 1. P = w^6*H : w^6 ne change jamais de signe pour w != 0 ===
+[PASS] w^6 = (w^3)^2 >= 0, nul seulement en w=0
+[PASS] w^6 > 0 a w=0.0001  (w^6=1.0e-24)
+[PASS] w^6 > 0 a w=0.15  (w^6=0.000011390625)
+[PASS] w^6 > 0 a w=0.3069808  (w^6=0.000836887885559824406707019677524)
+[PASS] w^6 > 0 a w=1.1  (w^6=1.771561)
+[PASS] w^6 > 0 a w=1.1547  (w^6=2.370363739265442768448329)
+
+=== 2. t*H : t strictement positif sur le domaine Hohmann certifie ===
+[PASS] t* > 0  (t*=0.190556059978477461516598432736)
+[PASS] t* < 1 (domaine physique t(1-t)>0 respecte)
+[PASS] t_lo du maillage (1e-4) > 0 strictement
+  => sur tout (0, t*], t > 0 strictement : signe(t*H) = signe(H) PARTOUT
+     sur ce domaine (aucune inversion possible par ce facteur).
+
+=== 3. t(1-t) >= 0 sur [0,1], jamais nul a l'interieur des domaines utilises ===
+[PASS] racines de t(1-t)=0 sont exactement {0,1}  (roots=[0, 1])
+[PASS] t(1-t) > 0 a t=0.0001  (val=0.00009999)
+[PASS] t(1-t) > 0 a t=0.1  (val=0.09)
+[PASS] t(1-t) > 0 a t=0.190556059978477461516598432736  (val=0.154244447983956361785325969185)
+[PASS] t(1-t) > 0 a t=0.49  (val=0.2499)
+  => t(1-t) > 0 strictement sur tous les domaines Hohmann/central
+     utilises (t in (0, 0.5] environ) ; ne s'annule qu'aux bords
+     physiques exclus t=0 (deja traite a part) et t=1 (hors domaine).
+
+=== 4. dt/dphi = sqrt(t(1-t)) > 0 sur phi in (0,pi), t in (0,1) ===
+[PASS] dt/dphi = sin(phi)/2 (symbolique)  (dt/dphi=sin(phi)/2)
+[PASS] dt/dphi > 0 a phi=1deg  (val=0.00872620321864175640970948925816)
+[PASS] dt/dphi > 0 a phi=90deg  (val=0.5)
+[PASS] dt/dphi > 0 a phi=164.37deg  (val=0.134712047234976358255374458025)
+[PASS] dt/dphi > 0 a phi=179deg  (val=0.00872620321864175640970948925833)
+  => dt/dphi > 0 strictement sur tout phi in (0,pi) : le changement
+     de variable t<->phi est une bijection CROISSANTE, ne retourne
+     jamais le sens d'une inegalite de signe.
+
+=== 5. p = w^2 : bijection croissante pour w > 0 ===
+[PASS] d(w^2)/dw = 2w > 0 pour w > 0 (symbolique)
+[PASS] d(w^2)/dw=2w > 0 a w=0.001
+[PASS] d(w^2)/dw=2w > 0 a w=0.5
+[PASS] d(w^2)/dw=2w > 0 a w=1.0
+[PASS] d(w^2)/dw=2w > 0 a w=1.15
+  => p=w^2 est une bijection croissante sur w>0 : aucune inversion
+     de sens d'inegalite lors du passage p<->w.
+
+=== 6. Preconditionneur de Krawczyk Y=J0^-1 : signe non impose ===
+[PASS] det(Y) strictement negatif sur toute la boite (pas de signe suppose a priori)  (det(Y) in [-0.0000483606148636325475363858180924, -0.0000483606148636325475363858180924])
+  => le signe NEGATIF de det(Y) est un FAIT CONSTATE par le certificat
+     d'intervalle, jamais une hypothese prealable du raisonnement de
+     Krawczyk (qui ne requiert que det(Y) != 0, separe de 0).
+
+============================================================
+BILAN AUDIT CONVENTIONS DE SIGNE R=2
+============================================================
+PASS : 25
+FAIL : 0
+
+ALL SIGN-CONVENTION CHECKS PASSED
+
+ATTENTION : cet audit controle les FACTEURS DE CONVERSION entre
+quantites signees (w^6, t, t(1-t), dt/dphi, p=w^2, det(Y)). Il ne
+recertifie PAS le signe de H lui-meme sur chaque domaine -- ceci
+reste le role des certificats d'intervalles (voir TABLEAU_GLOBAL_
+PREUVE_R2.md).

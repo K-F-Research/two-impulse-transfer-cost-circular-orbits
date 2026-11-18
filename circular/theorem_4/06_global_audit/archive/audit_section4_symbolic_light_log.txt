@@ -1,0 +1,14 @@
+pieces: 0.5s
+[pieces] peak RSS so far: 53 MB
+Ghat etc: 0.0s
+[Ghat] peak RSS so far: 53 MB
+diff_expr built: 0.0s, ops=3883
+[diff_expr] peak RSS so far: 54 MB
+together: 0.2s, ops=4531
+[together] peak RSS so far: 54 MB
+fraction split: 0.0s, num_ops=4254
+[fraction] peak RSS so far: 54 MB
+expand numerator: 174.2s, ops=0
+[expand] peak RSS so far: 730 MB
+
+RESULTAT: numerateur == 0 : True

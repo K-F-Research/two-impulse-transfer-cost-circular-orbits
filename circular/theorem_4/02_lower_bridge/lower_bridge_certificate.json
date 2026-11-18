@@ -1,0 +1,120 @@
+{
+  "certificate_id": "theorem_4_02_lower_bridge",
+  "theorem": "Theorem 4",
+  "model": "R=2",
+  "region_id": "02_lower_bridge",
+  "status": "closed_pending_independent_audit",
+  "domain": {
+    "parameter": "s",
+    "definition": "s := sqrt(p)",
+    "lower": "0.00015",
+    "upper": "0.15",
+    "lower_open": false,
+    "upper_open": false,
+    "note": "s is local to this region's construction and is consistent with the project-wide convention w := sqrt(p) documented in docs/mathematical_conventions.md. It is NOT the w := R^(-1/2) used in theorem_4/05_upper_bridge's certificate; see proof/lower_bridge_proof.md, Section 1."
+  },
+  "definitions": {
+    "branch_parameter": "x(s) = -1 + s^2 * Y(s)",
+    "P": "P(s) = s^6 * H(s^2, x(s)), the same pickled symbolic form (P_built.pkl) as theorem_4/01_lower_endpoint",
+    "H": "H(p,x) = ((1-x^2)*C_xx - x*C_x)*C_pp - (1-x^2)*C_px^2",
+    "G": "G(w,Y) := w^2 * C_p(w^2, -1+w^2*Y), the defining equation of the stationary branch Y(w)"
+  },
+  "claims": {
+    "mesh_coverage": {
+      "status": "verified",
+      "method": "contiguity check on the archived tile boundaries",
+      "script": "pilot_mesh_audit.py",
+      "result": "464 tiles cover [0.00015, 0.15] exactly, with no gap and no overlap"
+    },
+    "per_tile_H_negative": {
+      "status": "verified",
+      "method": "interval arithmetic (mpmath mp.iv): mean-value enclosure of P on each tile from a certified branch box Y_B, margin -sup(Q) > MARGIN_TOL = 1e-12",
+      "script": "full_mesh_bridge.py",
+      "result": "P < 0, hence H = P/s^6 < 0 (s>0 throughout this domain), on each of the 464 tiles; minimum margin 1.013...e-8, maximum margin 6.04...e-3"
+    },
+    "branch_inclusion_per_tile": {
+      "status": "verified",
+      "method": "sign-bracketing of G at the edges of Y_B plus strict G_Y<0 on the tile box, same pattern as theorem_4/01_lower_endpoint/scripts/certify_Ppp_v2.py",
+      "script": "full_mesh_bridge.py",
+      "result": "the true stationary branch Y(w) is certified contained in Y_B for every tile"
+    },
+    "tile_to_tile_stitching": {
+      "status": "verified",
+      "method": "hull of the two adjacent tiles' Y_B boxes at each shared boundary, re-checked for G_Y<0 and sign change of G at that boundary on the hull",
+      "script": "full_mesh_bridge.py",
+      "result": "463 internal boundaries tested, 0 failure"
+    },
+    "independent_audit_level_1": {
+      "status": "verified",
+      "method": "structural: re-reads the archived per-tile and stitching bounds and re-checks every criterion from them, with no new symbolic or interval computation",
+      "script": "pilot_mesh_audit.py",
+      "result": "PASS for 464/464 tiles and 463/463 stitchings, 0 violation"
+    },
+    "independent_audit_level_2": {
+      "status": "verified",
+      "method": "numerical: reconstructs the symbolic chain independently and re-evaluates every tile and stitching by interval arithmetic from the archived W/Y0/Y_B boxes alone",
+      "script": "pilot_mesh_audit_level2.py",
+      "result": "PASS for 464/464 tiles and 463/463 stitchings, 0 violation, 0 archive/re-evaluation discrepancy beyond 1e-30 serialization tolerance"
+    },
+    "junction_with_01_lower_endpoint": {
+      "status": "verified",
+      "note": "01_lower_endpoint's domain is 0 < s <= 0.00015 (closed above); this region's domain is 0.00015 <= s <= 0.15 (closed below). The two regions share the single point s=0.00015 under an identical definition of P and H (same P_built.pkl); see proof/lower_bridge_proof.md, Section 6."
+    }
+  },
+  "method": {
+    "analytic": false,
+    "interval_arithmetic": true,
+    "floating_point_stress_test_is_proof": false,
+    "distinction": "H<0 is established directly by interval mean-value enclosure of P on each tile (not an exact symbolic identity, and not a floating-point stress test): every bound reported here is a certified interval, independently re-evaluated at two separate audit levels (pilot_mesh_audit.py, pilot_mesh_audit_level2.py)."
+  },
+  "dependencies": [
+    "theorem_4/01_lower_endpoint (shares P_built.pkl and the junction point s=0.00015)"
+  ],
+  "artifacts": {
+    "proof": "proof/lower_bridge_proof.md",
+    "scripts": [
+      {
+        "file": "scripts/full_mesh_bridge.py",
+        "sha256": "4dc7b8e04aca9c1ed24eb6e18ff46ea890719d029716c5616e6687933270a9ca",
+        "role": "builds and certifies the adaptive mesh over [0.00015, 0.15]; writes the archive"
+      },
+      {
+        "file": "scripts/pilot_mesh_audit.py",
+        "sha256": "a4750a10459b977dbabd3664061a93b4a3b8eeb18c640e2f60d63e936db413fc",
+        "role": "independent structural audit (level 1)"
+      },
+      {
+        "file": "scripts/pilot_mesh_audit_level2.py",
+        "sha256": "8dfbeb9aad4295d9f902912e4d5df0c8d06467e0b49456ecf9cbaef023e19c63",
+        "role": "independent numerical re-evaluation audit (level 2)"
+      }
+    ],
+    "archive": {
+      "file": "archive/lower_bridge_archive.json",
+      "sha256": "864cb7e6cb365d82b021dc17807e59c3b61e9d9011cd383a463fae0bdd547c64",
+      "role": "complete per-tile and per-stitching certified bounds, consumed by both audit scripts"
+    },
+    "readme": {
+      "file": "README.md",
+      "sha256": "705fa24ecf93c19ce3d38b807ced5b509b28e6cc97ff441d1ce99f0ac386954c"
+    },
+    "proof_document": {
+      "file": "proof/lower_bridge_proof.md",
+      "sha256": "e0424d931ccc1f4f346bdcf9f86845cb3956a8fb3f8c87ce5d5bef06f8c330d5"
+    }
+  },
+  "auditor": {
+    "status": "pending",
+    "path": null
+  },
+  "provenance": {
+    "software_versions": {
+      "python": "3.13.18",
+      "sympy": "1.14.0",
+      "mpmath": "1.3.0"
+    },
+    "certificate_file": "02_lower_bridge/certificate/lower_bridge_certificate.json",
+    "certificate_sha256_note": "computed over this file with this field set to the empty string, then inserted below",
+    "certificate_sha256": "4ef1af27a4a25895b0ce9a89f196a896082bc2b74cff493cdde8d802f74a0f4c"
+  }
+}

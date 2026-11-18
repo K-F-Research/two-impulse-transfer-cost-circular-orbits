@@ -1,0 +1,317 @@
+{
+  "schema_version": "1.0",
+  "theorem": "Theorem 4",
+  "model": "R=2",
+  "region_id": "05_upper_bridge",
+  "parameterization": {
+    "name": "t",
+    "definition": "sin(phi/2)^2",
+    "domain": {
+      "lower": "0.0001000000000000000000000000000000000000000000000000000211419864763152195",
+      "lower_open": false,
+      "upper": "0.1905560599784774615165984327359824461525183318874399936026875566753102",
+      "upper_open": false,
+      "lower_note": "this is domain_T[0] / tiles[0]['t_lo'] exactly as archived, not the bare literal 1e-4: an earlier version of this certificate displayed '1e-4' here while the certified domain actually begins 2.1141986476315...e-56 above it (see boundary_closure.finding below); the field now states the domain actually covered by the certified tiles, with zero gap to 04_hohmann_endpoint by construction (see boundary_closure.lower_boundary)",
+      "upper_note": "this is domain_T[1] / tiles[-1]['t_hi'] exactly as archived, replacing an earlier truncated display value 't* = 0.19055605997847746151659843273598244615251833188744' that was NOT equal to the archived last-tile boundary: as an exact rational, that truncated value was strictly LESS than tiles[-1]['t_hi'] by 6.39731244332469...e-54, so stating it as the certified upper bound would have overstated coverage by that amount, in the direction of a gap rather than an overlap. The field now states the full archived value, which the last tile actually reaches (see boundary_closure.upper_boundary)."
+    },
+    "domain_source": "hohmann_full_mesh_archive.json, field 'domain_T'",
+    "boundary_closure": {
+      "method": "exact rational arithmetic (Python fractions.Fraction) applied directly to the archive's own serialized decimal strings, as actually read back from hohmann_full_mesh_archive.json — not an in-memory mp.mpf equality at generation time, which by itself does not establish that the written decimal strings carry the same value (an earlier version of this certificate relied on that weaker argument and has been superseded), and not a one-sided '>=' comparison against a display value copied by hand, which by itself does not establish that the display value equals what the tiles actually reach (an earlier version of this certificate's 'upper' domain field relied on exactly that unchecked copy and was wrong, see domain.upper_note above)",
+      "finding_lower": "the generator's in-memory assertion (mp.mpf(accepted[0]['t_lo']) == T_START, hohmann_full_mesh.py lines 325-326) and the archived decimal string are NOT exactly consistent: as an exact rational, the archived tiles[0]['t_lo'] is strictly greater than 1/10000 by 2.1141986476315...e-56, a genuine (if minuscule) serialization discrepancy, not merely a representation artifact that vanishes under closer inspection",
+      "resolution_lower": "rather than treat this as acceptable within a tolerance, 04_hohmann_endpoint's local certificate was recomputed with its upper boundary set to this archive's own recorded value (domain_T[0] = 0.0001000000000000000000000000000000000000000000000000000211419864763152195) instead of the bare literal 1e-4, at raised precision (mp.iv.dps=mp.mp.dps=90, sufficient to parse this ~75-digit string losslessly). All of that region's bounds (S1, S2, t*Cpphat, Ghat sign changes, t*Hhat after subdivision) remain positive at this corrected boundary, with values unchanged to over 50 significant digits.",
+      "finding_upper": "this certificate's own 'upper' domain field previously displayed a truncated value 't* = 0.19055605997847746151659843273598244615251833188744' (50 significant digits after the decimal point) rather than the full archived tiles[-1]['t_hi']; as an exact rational, that truncated value is strictly LESS than tiles[-1]['t_hi'] by 6.39731244332469...e-54",
+      "resolution_upper": "the domain.upper field has been replaced with the full archived decimal string tiles[-1]['t_hi'] (= domain_T[1]), so the stated domain is now exactly the domain the last tile actually reaches, with zero difference — no recomputation of the mesh was needed, since the discrepancy was in this certificate's own display of the bound, not in the archived tile data or in any adjacent certificate's claimed coverage",
+      "lower_boundary": {
+        "check": "Fraction(tiles[0]['t_lo']) == Fraction(hohmann_endpoint_domain_upper)",
+        "arithmetic": "exact rational",
+        "result": true,
+        "diff": "0 (exact equality, by construction: 04_hohmann_endpoint's domain upper boundary was set equal to the archive's own tiles[0]['t_lo'] / domain_T[0], not independently derived)"
+      },
+      "upper_boundary": {
+        "check": "Fraction(tiles[-1]['t_hi']) == Fraction(domain['upper'])",
+        "arithmetic": "exact rational",
+        "result": true,
+        "diff": "0 (domain.upper above is now set to the literal tiles[-1]['t_hi'] / domain_T[1] string, not to an independently-typed or truncated value)"
+      },
+      "internal_junctions": {
+        "check": "Fraction(tiles[j-1]['t_hi']) == Fraction(tiles[j]['t_lo']) for every j = 1..97",
+        "arithmetic": "exact rational",
+        "checked": 97,
+        "failures": 0
+      },
+      "note": "the generator's blocking mp.mpf assertions at generation time (lines 325-330 of hohmann_full_mesh.py) remain true and are not contradicted; they simply do not, by themselves, certify the serialized archive, which is the actual deliverable artifact this certificate is built from. The exact-rational checks above are performed directly on that artifact, and both of this certificate's own displayed domain endpoints have been set equal to the artifact's recorded values rather than to independently-typed decimal strings."
+    }
+  },
+  "definitions": {
+    "angle_map": "phi(t) = 2*arcsin(sqrt(t))",
+    "branch_map": "p(t,a) = 4/3 + a*t",
+    "Ghat": "Ghat(t,a) = C_p( p(t,a), phi(t) )",
+    "Hhat": "Hhat(t,a) = H( p(t,a), phi(t) )",
+    "Cpphat": "Cpphat(t,a) = C_pp( p(t,a), phi(t) )",
+    "note": "Same pullback definitions as 04_hohmann_endpoint, built from the same symbolic model (hohmann_regular_exprs.pkl, frozen in hohmann_FROZEN_v1.pkl)."
+  },
+  "mesh": {
+    "method": "adaptive interval mesh in t, 98 tiles, each tile proving existence+uniqueness of a root of Ghat(t,.) = 0 in its own a-box, via opposite signs of Ghat at the a-box boundaries and strict positivity of t*Cpphat (= d(Ghat)/da) on the tile",
+    "n_tiles": 98,
+    "n_internal_junctions": 97,
+    "n_junction_failures": 0,
+    "generator": "hohmann_full_mesh.py",
+    "archive_file": "hohmann_full_mesh_archive.json",
+    "frozen_expressions_sha256": "ddee30b7fd98137215014c046333899d0035495a70028cf5beb83349c532cd43",
+    "first_tile": {
+      "t_lo": "0.0001000000000000000000000000000000000000000000000000000211419864763152195",
+      "t_hi": "0.0006000000000000000000000000000000000000000000000000004531171422578175431",
+      "a_m": "-0.07525135908639305683012611764008701781227267644464876689912825811673468",
+      "r": "0.03000000000000000000000000000000000000000000000000002004573532569146735",
+      "a_box": [
+        "-0.10525135908639305683012611764008701781227267644464870921567891098027",
+        "-0.04525135908639305683012611764008701781227267644464875264810544997844924"
+      ]
+    },
+    "last_tile": {
+      "t_lo": "0.1901000000000000000000000000000000000000000000000018025125204861767438",
+      "t_hi": "0.1905560599784774615165984327359824461525183318874399936026875566753102",
+      "a_m": "-0.1205922554833758657984214626707239675350286153996611522667643993922161",
+      "r": "0.005000000000000000000000000000000000000000000000000003340955887615244558",
+      "a_box": [
+        "-0.1255922554833758657984214626707239675350286153996612992238409112602407",
+        "-0.1155922554833758657984214626707239675350286153996611254941347552675237"
+      ]
+    }
+  },
+  "radicands": {
+    "S1": {
+      "strictly_positive": true,
+      "minimum_certified_lower_bound": {
+        "decimal": "0.01711787874828469151325339392600792323816466252971369622564408990721197",
+        "rounding": "down"
+      },
+      "minimizing_tile": {
+        "index": 17,
+        "t_box": [
+          "0.03010000000000000000000000000000000000000000000000010864788546524775302",
+          "0.03210000000000000000000000000000000000000000000000012668904725837007363"
+        ],
+        "a_box": [
+          "-0.1110312995392039875096136748939305834015862173952672761420897947548179",
+          "-0.05103129953920398750961367489393058340158621739526723605061914337188318"
+        ],
+        "upper_bound_on_that_tile": "0.0375546360689706566298668327099371013247774666538257731090997171925402"
+      }
+    },
+    "S2": {
+      "strictly_positive": true,
+      "minimum_certified_lower_bound": {
+        "decimal": "0.01472948385350868432038955094349287701658450409932966612332071091126209",
+        "rounding": "down"
+      },
+      "minimizing_tile": {
+        "index": 17,
+        "t_box": [
+          "0.03010000000000000000000000000000000000000000000000010864788546524775302",
+          "0.03210000000000000000000000000000000000000000000000012668904725837007363"
+        ],
+        "a_box": [
+          "-0.1110312995392039875096136748939305834015862173952672761420897947548179",
+          "-0.05103129953920398750961367489393058340158621739526723605061914337188318"
+        ],
+        "upper_bound_on_that_tile": "0.02287042889125478989866368550892695965431017097286421288701031074909476"
+      }
+    },
+    "note": "minimum_certified_lower_bound is the minimum, over the 98 tiles, of each tile's own certified lower bound for that radicand — not an independently re-derived minimum of the true function. Both S1 and S2 happen to attain their minimum lower bound on the same tile (index 17), which is incidental, not implied by the construction."
+  },
+  "H": {
+    "definition": "H(p,phi) = C_phiphi(p,phi) * C_pp(p,phi) - C_pphi(p,phi)^2",
+    "rescaled_quantity": {
+      "name": "PHhat",
+      "definition": "PHhat(t,a) = t * Hhat(t,a)",
+      "factor": "t",
+      "factor_positive_on_domain": true,
+      "factor_domain": "domain.lower <= t <= domain.upper (see parameterization.domain; strict positivity of t itself is immediate on this closed domain, which excludes 0)"
+    },
+    "sign": "positive",
+    "method": "per-tile interval evaluation of t*Hhat on each of the 98 tiles, no sign ambiguity reported on any tile",
+    "certified_lower_bound_over_all_tiles": {
+      "decimal": "0.05516878145375071",
+      "rounding": "down",
+      "source": "archive_file, minimum of per-tile field 'margin_tH'"
+    }
+  },
+  "Cpp": {
+    "definition": "C_pp(p,phi)",
+    "rescaled_quantity": {
+      "name": "tCpphat",
+      "definition": "tCpphat(t,a) = t * Cpphat(t,a) = d(Ghat)/da",
+      "factor": "t",
+      "factor_positive_on_domain": true,
+      "factor_domain": "domain.lower <= t <= domain.upper (see parameterization.domain)"
+    },
+    "certified_lower_bound_over_all_tiles": {
+      "decimal": "2.277982936620297",
+      "rounding": "down",
+      "source": "archive_file, minimum of per-tile field 'margin_Ga'"
+    },
+    "conclusion": "C_pp > 0 throughout this region (t > 0 strictly everywhere on this closed domain, so no separate limiting argument is needed here, unlike at t = 0 in 04_hohmann_endpoint)"
+  },
+  "junctions": [
+    {
+      "junction_id": "J_HOHMANN_LOCAL_UPPER_BRIDGE",
+      "description": "Junction with 04_hohmann_endpoint at the shared boundary t ≈ 1e-4 (exact value in parameter_value below)",
+      "nature": "branch-identity obligation, logically independent of the sign obligations above even though both are checked by the same script",
+      "parameter_value": "0.0001000000000000000000000000000000000000000000000000000211419864763152195",
+      "checks": [
+        {
+          "name": "exact equality of the two certificates' shared boundary at the archived value of t_lo of the mesh's first tile",
+          "evidence": "see parameterization.boundary_closure above: the archived decimal string for tiles[0]['t_lo'] is, as an exact rational, strictly greater than 1/10000 by 2.114...e-56 — a genuine serialization discrepancy relative to the bare literal 1e-4, not merely a round-trip artifact. 04_hohmann_endpoint's local certificate was therefore recomputed with its domain's upper boundary set to this archived value exactly (confirmed by Fraction equality, not an mp.mpf-arithmetic argument), closing the gap by construction rather than by tolerance.",
+          "sha256_note": "certifying_script_sha256 below is the SHA-256 of the deposited English-language script (hohmann_raccord_t1e4.py, logic and numeric outputs unchanged, comments/strings translated for deposit per this project's English-dossier convention); the originally-executed script carried a different hash (7fbe9381cae2df091d96e917a75bd313d4b11be6ede649d1d7c06715a089bb3b) before translation. The deposited script was re-run in this session and reproduces every PASS result and every numeric value below exactly.",
+          "superseded_check": "hohmann_raccord_t1e4.py's SECURITY_EPS = 1e-40 tolerance comparison (consistent with audit_hohmann_archive.py's convention) is retained only as an informal secondary sanity check; it is not the closure proof, since a tolerance comparison cannot by itself distinguish a true gap of this size from a round-trip artifact of the same size",
+          "result": "PASS (exact rational equality, zero difference, after recomputing 04_hohmann_endpoint's boundary against the archive's own value)"
+        },
+        {
+          "name": "strict inclusion of the mesh's first-tile a-box in the local certificate's a-box",
+          "method": "interval inclusion, a_box_mesh = [-0.10525135908639306, -0.04525135908639306] strictly inside a_box_local = [-0.25, 0.25]",
+          "result": "PASS"
+        },
+        {
+          "name": "identity of the frozen symbolic expressions shared by both sides",
+          "method": "SHA-256 of Ghat, Ghat_a (= tCpphat), S1_hat, S2_hat, tHhat, computed from hohmann_regular_exprs.pkl (with the key alias Ghat_a <- tCpphat) and compared against hohmann_FROZEN_v1.pkl; global fingerprint compared against hohmann_full_mesh_archive.json's recorded frozen_sha256",
+          "result": "PASS",
+          "frozen_sha256": "ddee30b7fd98137215014c046333899d0035495a70028cf5beb83349c532cd43"
+        },
+        {
+          "name": "independent re-verification of existence+uniqueness on both sides at the exact shared boundary (t ≈ 1e-4)",
+          "method": "re-evaluation of S1>0, S2>0, t*Cpphat>0, Ghat sign change at the a-boundaries, on both the local box and the mesh's first tile",
+          "result": "PASS on both sides (local side's t*Hhat positivity on the unsubdivided box is the one documented exception: inconclusive there, resolved by the n_a=100 subdivision recorded in 04_hohmann_endpoint's certificate; this does not affect existence/uniqueness, only the sign certificate)"
+        }
+      ],
+      "certifying_script": "hohmann_raccord_t1e4.py",
+      "certifying_script_sha256": "b620f81e54afc9619d368e360cb427d728acc376ac576d132d2489c86cada1ef",
+      "overall_result": "15/15 checks passed",
+      "conclusion": "By strict inclusion of the mesh's first-tile a-box inside the local certificate's a-box, both at the exact shared boundary recorded in the two certificates (parameterization.domain.upper of 04_hohmann_endpoint == parameterization.domain.lower of this certificate, by exact rational equality, not the approximate value t = 1e-4), and by the local certificate's uniqueness on its own (larger) box, the two constructions' roots coincide: they describe the same continuous stationary branch across that boundary."
+    },
+    {
+      "junction_id": "J_UPPER_BRIDGE_CENTRAL_MESH",
+      "description": "Junction with 03_central_mesh at s = w = 1.144701",
+      "nature": "branch-identity obligation in the (p, phi) plane; a phi-only overlap is explicitly insufficient and is not used as the sole junction argument",
+      "checks": [
+        {
+          "name": "non-empty overlap of the phi-boxes on both sides (reported for completeness; not the retained argument by itself)",
+          "method": "phi-box from the last Hohmann-bridge tile (phi = 2*arcsin(sqrt(t))) intersected with the phi-box of a freshly certified central-mesh tile ending at w = 1.144701",
+          "result": "PASS",
+          "phi_overlap": [
+            "0.902308504298590004836808814797617652353139687830024016035005",
+            "0.903470263454503548048308537588006364120781985855727190318189"
+          ],
+          "phi_overlap_width": {
+            "decimal": "0.00116175915591354321149972279038871176764229802570317428318445",
+            "note": "computed from the two bounds above, not an independently rounded approximation"
+          }
+        },
+        {
+          "name": "non-empty overlap of the p-boxes on both sides",
+          "method": "p-box from the last Hohmann-bridge tile (p = p_H + a*t at t = t_hi_last, a ranging over the tile's a-box, widened by the serialization security margin) intersected with the p-box of a freshly certified central-mesh tile ending at w = 1.144701",
+          "result": "PASS",
+          "p_box_hohmann_side": [
+            "1.30940096796461089699955554376417931905445249527064159942532",
+            "1.31130652856439567161472152809153914351601678980151169612693"
+          ],
+          "p_box_central_side": [
+            "1.309882539000999999999999999999999999999999999999999814",
+            "1.310340379401000000000000000000000000000000000000001465"
+          ],
+          "strict_inclusion_test": {
+            "statement": "p_box_central_side is strictly contained in p_box_hohmann_side",
+            "check": "1.30940096796461089699955554376417931905445249527064159942532 < 1.309882539000999999999999999999999999999999999999999814  AND  1.310340379401000000000000000000000000000000000000001465 < 1.31130652856439567161472152809153914351601678980151169612693",
+            "result": true,
+            "consequence": "the exact intersection is the central-side box; p_overlap below is its outward-rounded interval enclosure, which is why it is numerically identical to p_box_central_side rather than a strictly narrower set"
+          },
+          "p_overlap": [
+            "1.30988253900099999999999999999999999999999999999999981364579",
+            "1.31034037940100000000000000000000000000000000000000146500871"
+          ],
+          "p_overlap_width": "0.000457840400000000000000000000000000000000000000001651362912195"
+        },
+        {
+          "name": "strict sign of C_pphi on the overlap, giving uniqueness of phi at fixed p",
+          "method": "interval evaluation of C_pphi on P_overlap x hull(phi_Hohmann_box, phi_central_box)",
+          "result": "PASS",
+          "C_pphi_bound": [
+            "0.777710552096633059597747500264080868770096975762961455258944",
+            "1.36837413493452755987772117473524717536740896072617192142621"
+          ],
+          "sign": "strictly positive"
+        },
+        {
+          "name": "existence of a stationary root for every p in P_overlap on each side, not merely at one point",
+          "method": "both sides' existence certificates are mean-value/interval-Newton arguments over the full p-range of their respective tile, not a single-point check: on the central side, _newton_contract uses dp = Bp - p0 spanning the entire tile's p-interval Bp_central to prove phi(p) in B_phi_central for every p in Bp_central, by the same mean-value-enclosure construction used throughout the central mesh (mesh_certificate_R2_v6.py); on the Hohmann side, the last tile's existence certificate (opposite signs of Ghat at the a-box boundaries, for every t in the tile's t-range) gives, via p(t,a) = p_H + a*t, existence of a root for every p in that tile's p-image, which is p_box_hohmann_side",
+          "consequence": "since P_overlap is a subset of both Bp_central and p_box_hohmann_side, both existence certificates apply to every p in P_overlap specifically, not only to some p outside it",
+          "result": "PASS"
+        }
+      ],
+      "certifying_script": "hohmann_central_join.py",
+      "certifying_script_sha256": "ad7c95026e22c7bc8b1569fe8162532e63891feb2fb56c3ab388a3e936217035",
+      "certificate_log": "hohmann_central_join_log_en.txt",
+      "certificate_log_note": "re-run in this session against the deposited English-language script; every numeric value (p-box, phi-box, overlaps, C_pphi bound) is identical to the originally-executed (French-commented) script's log, which is superseded by this one for deposit",
+      "overall_result": "junction established via the full (p, phi) check (Section 6 of the script)",
+      "conclusion": "Non-empty p-overlap combined with strict sign-separation of C_pphi on the overlap gives uniqueness of phi at fixed p; combined with existence on both sides, the two constructions' roots are the same physical (p, phi) point."
+    }
+  ],
+  "scope_note": "The two junctions above are logically independent obligations from the sign certificates (H > 0, C_pp > 0) established on this region's own 98 tiles, even though the t = 1e-4 junction is checked by a script (hohmann_raccord_t1e4.py) that also re-verifies some of the same existence/uniqueness quantities used in the sign argument.",
+  "branch_identification_note": {
+    "title": "Hohmann bridge parameter and branch identification",
+    "status": "closed: the coverage obligation below is resolved by an independent global-uniqueness result for the minimizer, combined with the branch-identification arguments already in place at both junctions",
+    "text": "The Hohmann bridge is certified directly in the auxiliary parameter t, with a determined by the regularized stationary equation Ghat(t,a) = 0. The proof of the sign H > 0 on this bridge is performed tile by tile in the (t,a)-domain. It does not rely on monotonicity or injectivity of the map t -> w = sqrt(p). At each of the 97 internal tile boundaries, the junction check certifies Ghat_a > 0 on the hull of the two adjacent a-intervals. Since each tile supplies a root in that hull, strict monotonicity implies that the two roots coincide. Thus the tilewise roots define a single consistently identified root across the entire bridge. At the Hohmann/central junction, branch identification is established independently by a direct overlap in (p,phi): both constructions provide a stationary root for every p in the certified overlap, and C_pphi > 0 on the corresponding product box gives uniqueness in phi. This junction argument does not use an image or monotonicity claim for w(t). Accordingly, the w-interval displayed for the Hohmann bridge is a descriptive endpoint label, not a claim that t -> w is injective or monotone.",
+    "open_obligation": "(historical) the remaining coverage obligation was to justify that every point of the physical stationary branch in the claimed region is represented by the certified Hohmann family, using the endpoint identification and the relevant existence/uniqueness statements, without assuming such injectivity. This is resolved; see the 'closure' field below.",
+    "independently_re-verified_in_this_session": "the 97 internal-junction hull-monotonicity checks (Ghat_a > 0 on hull(A_prev, A_cur) at each shared t-boundary) were recomputed directly from the frozen symbolic expressions against the archive, with 0 failures and a worst-case lower bound of approximately 2.383 for Ghat_a on any hull; this re-verification is independent of the generator script's own recorded 'status: OK' labels. The direct-overlap argument at the Hohmann/central junction (W_JOIN = 1.144701 as the central mesh's own exact boundary, p-box overlap, C_pphi > 0 on the overlap) was reviewed by reading hohmann_central_join.py, not independently re-executed in this session.",
+    "not_yet_established": "none remaining for this obligation; see 'closure' below.",
+    "closure": {
+      "result": "for every R > 1 and every phi in (0,pi), the stationary equation C_p(p,phi) = 0 has a unique root over the full physical domain p > 0, and that root is the global minimizer p*(phi,R). Consequently there is nothing for the certified Hohmann tile family to miss: on the phi-range it covers, the root each tile certifies inside its own (necessarily narrow) a-box is the only stationary point that exists anywhere on p > 0 for that phi, not merely the only one found by a local search.",
+      "source": "circular/existence_uniqueness_minimizer/ (companion result cited in the manuscript, Section 3.4): README.md states the result and its status (scientific status PROVEN -- ANALYTICALLY, reproducibility status REPRODUCED, technical audit 2026-10-25); lemma1_closure_stationary_point.py carries the closure argument; lemma1_stress_test_2000_trials.py is an independent numerical cross-check, not itself a proof; assumption_H_proof.md, assumption_H_proof_certificate.py, assumption_H_independent_verification.py, and assumption_H_certificate.json (all in the same folder) carry the Assumption H dependency itself, see 'assumption_H_verification' below.",
+      "proof_structure": "with s := sqrt(p), w := R^(-1/2) in (0,1), u related to cot(phi/2)/s: (i) a prior unconditional result ('Assumption H', closed 2026-09-30, located and independently re-verified in this session -- see 'assumption_H_verification' below) gives C_ss > 0 at every stationary point of C(.,phi,R), for every R>1 and phi in (0,pi), with no restriction; (ii) this script closes the remaining boundary step: C_s(0+) has a finite, strictly negative limit, and C_s(s)/s -> 2u(1+w^2) > 0 as s -> infinity; (iii) a topological argument then shows that two zeros of C_s, both satisfying C_ss>0, would force a third zero with C_ss <= 0 strictly between them by continuity, which is impossible if C_ss>0 holds at every zero -- so at most one stationary point of any kind (minimum, maximum, or saddle in the one-dimensional sense) can exist; combined with (i)'s existence (intermediate value theorem, same two boundary limits), the stationary point is unique and is the global minimum.",
+      "assumption_H_verification": "the 'Assumption H' proof referenced above is now deposited in circular/existence_uniqueness_minimizer/ (it was not shipped there prior to this closure, which only cited it): assumption_H_proof.md (the full writeup), assumption_H_proof_certificate.py (sha256 c85503e99920ea68711b1875fbacc7c8d9f8d25c541a445ede67d493537bd82c; the external collaborator's algebraic certificate, all assertions pass) and assumption_H_independent_verification.py (sha256 69102b3170e29abac506e9e13884e8b7eeedf70c3218361af6aa5d05677cd5fc; a from-scratch reconstruction of every algebraic step directly from the manuscript's original S1, S2 formulas, not from the collaborator's already-substituted notation; confirms every identity used in the proof exactly, with no residual hypothesis). Both scripts were re-executed in this session. assumption_H_certificate.json in the same folder is the certification record for this dependency, including this cross-reference.",
+      "notational_correspondence_check": "existence_uniqueness_minimizer/lemma1_closure_stationary_point.py works in substitution variables (s, w, q, u) rather than the Hohmann bridge's native (p, phi, R, t). The identity of the underlying cost function was checked numerically rather than by a symbolic rewrite: S1(p,phi,R) and S2(p,phi,R) as built from physical orbital quantities in hohmann_build_Rta.py (velocities, eccentricity, in variables p and t, with phi(t) = 2*arcsin(sqrt(t))) were evaluated side by side with the substituted-variable S1, S2 of lemma1_closure_stationary_point.py (s = sqrt(p), w = R^(-1/2), q = cot(phi/2)) at 50-digit precision, at 9 points spanning R in [1.05, 5.0] (including R=2, the value used throughout this region's certificates) and t in (0,1): all differences were at the level of floating-point roundoff (~1e-50 to ~1e-49), i.e. zero within precision. This is strong numerical corroboration that the two scripts' cost functions are the same object, not an independent symbolic proof of that fact.",
+      "stress_test": "lemma1_stress_test_2000_trials.py was re-executed in this session: 2000 random (w,u) pairs, 0 boundary-sign failures, 0 decreasing-crossing detections on the coarse grid used by that script. Consistent with, but not a substitute for, the analytic closure above.",
+      "scope_of_this_closure": "this closes the specific coverage obligation stated above for the Hohmann bridge region (05_upper_bridge) and, by the same argument, for every other region of the physical branch at R=2 that this project's certificates already identify as carrying a genuine stationary root. It does not itself certify any region's sign conditions (H>0, C_pp>0); those remain separately established by each region's own interval certificate."
+    }
+  },
+  "provenance": {
+    "generators": [
+      {
+        "script": "hohmann_full_mesh.py",
+        "sha256": "371acbc6543b7b6a785a33b106741a87e17ddbddfdbd0d4ad7aaa1be8c72a10b",
+        "sha256_note": "SHA-256 of the deposited English-language script. The originally-executed script (identical logic and numeric outputs, French comments) hashed to 01e5a288c4f0739cb99ef66e646df2e652a2b505b36dcbea5bad2c654db7359f; the deposited script was re-run in this session from the existing complete checkpoint and reproduces every reported quantity exactly (98 tiles, 97 junctions, 0 failures, same worst-case bounds), the only byte-level difference in the regenerated archive being the non-substantive wall-clock field 'elapsed_seconds'."
+      },
+      {
+        "script": "hohmann_raccord_t1e4.py",
+        "sha256": "b620f81e54afc9619d368e360cb427d728acc376ac576d132d2489c86cada1ef",
+        "sha256_note": "SHA-256 of the deposited English-language script; see parameterization.boundary_closure.J_HOHMANN_LOCAL_UPPER_BRIDGE's sha256_note for detail."
+      },
+      {
+        "script": "hohmann_central_join.py",
+        "sha256": "ad7c95026e22c7bc8b1569fe8162532e63891feb2fb56c3ab388a3e936217035",
+        "sha256_note": "SHA-256 of the deposited English-language script; see the J_UPPER_BRIDGE_CENTRAL_MESH junction's certificate_log_note for detail."
+      }
+    ],
+    "archive_file_sha256": {
+      "file": "hohmann_full_mesh_archive.json",
+      "sha256": "5e448caaacedb9941ba11e744a8ba976d0da8c62f0b27b32f75fb7af734bb9dd"
+    },
+    "certificate_file": "05_upper_bridge/certificate/upper_bridge_certificate.json",
+    "certificate_sha256_note": "computed over this file with this field set to the empty string, then inserted below",
+    "certificate_sha256": "345030bbd6796c9688c0253e6cc14ee085a986e6267ac94977743c997bc0a4d5",
+    "auditor": {
+      "status": "pending",
+      "path": null
+    },
+    "arithmetic": "validated interval arithmetic (mpmath mp.iv)",
+    "precision": {
+      "mp_iv_dps": 50,
+      "mp_mp_dps": 60
+    },
+    "software_versions": {
+      "python": "3.13.18",
+      "sympy": "1.14.0",
+      "mpmath": "1.3.0"
+    }
+  }
+}

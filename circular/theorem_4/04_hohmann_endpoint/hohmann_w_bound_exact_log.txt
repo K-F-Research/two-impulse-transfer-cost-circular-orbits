@@ -1,0 +1,33 @@
+[PASS] t0 parsed losslessly at dps=90 (exact-rational round-trip)  (t0_scalar=0.0001000000000000000000000000000000000000000000000000000211419864763152195)
+=== 1. Certified enclosure of the root a(t_archive) ===
+[PASS] monotone bisection converges (final bracket width negligible)  (width=3.50325e-46)
+[PASS] t*Cpp > 0 on the final bracket (monotonicity re-verified)  (tCpp in [5.9754183962098501538667618199877233201970077364146599157461517294640097268627297323593407208288, 5.9754183962098501538667618199877233201970077364359153203869141790282499486180395446145297268186])
+[PASS] Ghat(t_archive, lo) <= 0  ([-1.0464591956582546345357289366998758942658462055821437136663809173507229625452197798487667056244e-45, -1.0464591956582546345357289366998758942658461004048162196625895172738088269642641291047743503237e-45])
+[PASS] Ghat(t_archive, hi) >= 0  ([1.0468769599185264512853486573587530506189597440931107776256223424350680452216344098766751811561e-45, 1.0468769599185264512853486573587530506189598358931585786931088853260036034649889335132052648958e-45])
+[PASS] strict sign change confirmed => unique root a(t_archive) in [lo, hi]
+
+Certified enclosure: a(t_archive) in [-0.075206477856988204318026467241016917314150051517551361567610901770980464934639772389377474, -0.0752064778569882043180264672410169173141500511672267454864066340400480691121607395693119886]
+
+=== 2. Exact t -> w conversion at the boundary t = t_archive ===
+[PASS] p_lo <= p_hi (consistent bracket)
+p(t_archive) = 4/3 + t_archive*a(t_archive) in [1.333325812685547634512901530686609231642, 1.333325812685547634512901530686609231642]
+w_-           = sqrt(p(t_archive))            in [1.154697281838641739561514375537810903348, 1.154697281838641739561514375537810903348]
+w_H                                              = 1.154700538379251529018297561003914911295
+[PASS] w_- < w_H strictly (w = w_H is attained only in the limit t -> 0)  (w_H - w_hi = 3.2565406097894567832e-6)
+
+[info] w_- recomputed at the bare literal 1e-4 (for comparison only): [1.15469728183864173956151437554, 1.15469728183864173956151437554]
+[info] shift in w_hi between t=1e-4 and t=t_archive: -6.884983462e-58
+
+============================================================
+SUMMARY: exact w-conversion near the Hohmann endpoint, at t_archive
+============================================================
+PASS: 8
+FAIL: 0
+
+ALL REQUIRED CHECKS PASSED.
+
+Conclusion: w_- = sqrt(4/3 + t_archive*a(t_archive)) in [1.15469728183864173956151437554, 1.15469728183864173956151437554]
+is the correct lower bound of the Hohmann bridge in the w-variable,
+strictly below w_H. The point w = w_H (t = 0) is a limit of the
+branch, never attained for t > 0: the physical domain of the
+Hohmann-endpoint region remains w < w_H strictly.

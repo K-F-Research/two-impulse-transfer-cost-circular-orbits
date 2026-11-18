@@ -1,0 +1,33 @@
+
+=== AUDIT INDEPENDANT a dps=50 ===
+  dps: 50
+  frozen_sha256_match: True
+  n_tiles_total: 98
+  n_pass_recertified: 98
+  n_fail_recertified: 0
+  n_gaps: 0
+  n_junctions_checked: 97
+  n_junctions_failed: 0
+  t_start: 0.0001
+  t_end: 0.19055605997847746151659843273598244615251833188744
+  worst_Ga_inf: 2.277982936620297
+  worst_tH_inf: 0.05516878145375071
+
+=== AUDIT INDEPENDANT a dps=100 ===
+  dps: 100
+  frozen_sha256_match: True
+  n_tiles_total: 98
+  n_pass_recertified: 98
+  n_fail_recertified: 0
+  n_gaps: 0
+  n_junctions_checked: 97
+  n_junctions_failed: 0
+  t_start: 0.0001000000000000000000000000000000000000000000000000000211419864763152195
+  t_end: 0.1905560599784774615165984327359824461525183318874399936026875566753102
+  worst_Ga_inf: 2.277982936620297
+  worst_tH_inf: 0.05516878145375071
+
+=== COMPARAISON ENTRE LES DEUX PRECISIONS ===
+Conclusions identiques aux deux precisions (inf Ghat_a>0, inf tHhat>0, 0 trou, 0 echec jonction, 0 echec tuile) : True
+
+=== AUDIT INDEPENDANT REUSSI AUX DEUX PRECISIONS ===

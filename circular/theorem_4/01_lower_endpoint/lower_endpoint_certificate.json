@@ -1,0 +1,141 @@
+{
+  "certificate_id": "theorem_4_01_lower_endpoint",
+  "theorem": "Theorem 4",
+  "model": "R=2",
+  "region_id": "01_lower_endpoint",
+  "status": "closed_pending_independent_audit",
+  "domain": {
+    "parameter": "s",
+    "definition": "s := sqrt(p)",
+    "lower": "0",
+    "upper": "0.00015",
+    "lower_open": true,
+    "upper_open": false,
+    "note": "s is local to this region's construction and is consistent with the project-wide convention w := sqrt(p) documented in docs/mathematical_conventions.md (shared with inflection_uniqueness_R2, universal_convexity_z, curvature_sign_change_general_R). It is NOT the w := R^(-1/2) used in theorem_4/05_upper_bridge's certificate; see proof/lower_endpoint_sign_conclusion.md, Section 1."
+  },
+  "definitions": {
+    "branch_parameter": "x(s) = -1 + s^2 * Y(s)",
+    "P": "P(s) = s^6 * H(s^2, x(s))",
+    "H": "H(p,x) = ((1-x^2)*C_xx - x*C_x)*C_pp - (1-x^2)*C_px^2",
+    "derivation_chain": "F0 := s^4*H after substitution p=s^2, x=-1+s^2*Y (F0_full_pipeline.py); P := s^2*F0 in cancelled form (build_P.py), giving P = s^6*H exactly. The same P_built.pkl (the pickled symbolic form of P) is used both by this region's certificate and by the 02_lower_bridge mesh generator."
+  },
+  "claims": {
+    "P_at_0_is_0": {
+      "status": "verified",
+      "method": "exact symbolic substitution at (s,Y,u1,u2)=(0,1/2,sqrt(2),sqrt(1/2))",
+      "script": "build_P.py / build_P2.py",
+      "result": "P(0,1/2) = 0 (exact, not simplified post hoc)"
+    },
+    "P_prime_at_0_is_0": {
+      "status": "verified",
+      "method": "direct substitution u1=sqrt(S1(s,Y)), u2=sqrt(S2(s,Y)) into P, then differentiation (method A), evaluated at (s,Y)=(0,1/2) and combined with Y'(0)",
+      "script": "verify_Pprime_symbolic.py",
+      "result": "P_s(0,1/2) + P_Y(0,1/2)*Y'(0) = 0 (exact)"
+    },
+    "second_derivative_cross_check": {
+      "status": "verified",
+      "method": "method A (verify_Pprime_symbolic.py, direct substitution before differentiation) confronted term by term against method B (build_Ppp_chainrule.py, formal differentiation in 4 independent arguments + chain rule), at (s,Y,u1,u2)=(0,1/2,sqrt(2),1/sqrt(2))",
+      "script": "crosscheck_Ppp_methods.py",
+      "result": "P_ww, P_wY, P_YY, P_Y agree exactly between both methods; P''(0)/2 recomposed via method B equals -9/32 - sqrt(2)/8 = -(9+4*sqrt(2))/32 exactly"
+    },
+    "P_second_derivative_negative": {
+      "status": "verified",
+      "method": "interval arithmetic (mpmath mp.iv), certified on the rectangle s in [0,0.00015], Y in [0.49987175, 0.500038475]",
+      "script": "certify_Ppp_v2.py",
+      "result": "P'' in [-1.762646803497884041911200481078878118286174351243367846, -0.06834463226223710903071307468272453367443710370790393662] (strictly negative throughout)"
+    },
+    "stationary_branch_existence": {
+      "status": "verified",
+      "method": "sign of G at the box edges Y=Y_lo, Y=Y_hi, certified by interval arithmetic for every s in the box",
+      "script": "certify_Ppp_v2.py",
+      "result": "G(s,Y_lo) > 0 and G(s,Y_hi) < 0 for every s in [0,0.00015] (intermediate value theorem gives at least one root of G(s,.)=0 in [Y_lo,Y_hi])"
+    },
+    "stationary_branch_uniqueness": {
+      "status": "verified",
+      "method": "G_Y < 0 strictly certified by interval arithmetic on the full box (s,Y) in [0,0.00015] x [Y_lo,Y_hi]",
+      "script": "certify_Ppp_v2.py",
+      "result": "G_Y < 0 strictly throughout the box (strict monotonicity in Y gives at most one root for each s)"
+    },
+    "branch_inclusion": {
+      "status": "verified",
+      "note": "existence + uniqueness above together certify that the true physical branch Y(s) (the root of G(s,.)=0) is contained in [Y_lo,Y_hi] for every s in the box -- not merely assumed. This is the check that an earlier version of this certificate (certify_Ppp.py) did not perform; see certify_Ppp_v2.py's own header for that audit finding."
+    },
+    "H_negative": {
+      "status": "verified",
+      "method": "analytic (Taylor-Lagrange), not interval arithmetic",
+      "proof": "proof/lower_endpoint_sign_conclusion.md",
+      "result": "H(s^2,x(s)) = P(s)/s^6 < 0 for every s in (0, 0.00015], from P(0)=P'(0)=0 and P''<0 on the certified rectangle"
+    }
+  },
+  "method": {
+    "analytic": true,
+    "interval_arithmetic": true,
+    "floating_point_stress_test_is_proof": false,
+    "distinction": "P(0)=0 and P'(0)=0 are exact symbolic identities (sympy, zero difference, no floating-point step). P''<0 and branch inclusion are interval-certified bounds (mpmath mp.iv), a logically distinct kind of result. The numeric evaluation of F0 along the branch in F0_full_pipeline.py (converging to -(9+4*sqrt(2))/32 as s->0) is corroborative only, consistent with but not a substitute for the exact symbolic identity."
+  },
+  "dependencies": [],
+  "artifacts": {
+    "proof": "proof/lower_endpoint_sign_conclusion.md",
+    "scripts": [
+      {
+        "file": "scripts/build_P.py",
+        "sha256": "14bbf4483ab8bd369ee49cb0295b7b9ae75a033302266c6affca4ee70a4b8414",
+        "role": "builds P = s^2*F0 (cancelled form); verifies P(0,1/2)=0"
+      },
+      {
+        "file": "scripts/build_P2.py",
+        "sha256": "b70bbab086ea92b6cc20822bc2dcfaa3a2ff4b7a7ef63b2af44f5f25dc70c71e",
+        "role": "re-evaluates P(0,1/2) from the saved P_built.pkl"
+      },
+      {
+        "file": "scripts/build_Ypp_Yppp_G.py",
+        "sha256": "b14f75259bd20aabd1f0a67a6e6fa087142be26e9626a912a58bd93b964c7056",
+        "role": "builds G and derives Y'(0), Y''(0), Y'''(0) by implicit differentiation; supporting derivation, not directly cited in the proof document"
+      },
+      {
+        "file": "scripts/verify_Pprime_symbolic.py",
+        "sha256": "2c907066bbb75114b46060b262df8b4a3947e9c5df06398b1b5d7b34483b0737",
+        "role": "method A for P'(0) and P''(0)"
+      },
+      {
+        "file": "scripts/build_Ppp_chainrule.py",
+        "sha256": "3d1adb0e6aa4d53cdfbd73e5db7ebe7f7db7b9f3daec51d763aaf79baa5464d1",
+        "role": "method B (chain-rule) for the second total derivatives of P"
+      },
+      {
+        "file": "scripts/crosscheck_Ppp_methods.py",
+        "sha256": "a6c0cd9e45c4921b71124bd00deb69555fc52d05b71297ce2ffef0ecf6051acb",
+        "role": "confronts methods A and B term by term"
+      },
+      {
+        "file": "scripts/certify_Ppp_v2.py",
+        "sha256": "bc03e0cee22ac4c93c7776936337bf5b58e2587f0a8cff5666886c81a7b998de",
+        "role": "interval certificate for P''<0 and branch inclusion"
+      },
+      {
+        "file": "scripts/F0_full_pipeline.py",
+        "sha256": "3aa3636f4a0bfe5928c191a7883c4d10a14685d248f87f4baae5324af350af1f",
+        "role": "builds H and F0 from the original cost formulas; numeric corroboration of F0's limit along the branch. This script's final 'Test C' section is a comment-only placeholder with no executable content; no claim in this certificate or in the proof document depends on it."
+      }
+    ],
+    "all_scripts_re_executed": true,
+    "readme": {
+      "file": "README.md",
+      "sha256": "30f7e952ea0724f9e0d3c59c99afcb60e744ea9196d164d5a8911d2acdb3837e"
+    }
+  },
+  "auditor": {
+    "status": "pending",
+    "path": null
+  },
+  "provenance": {
+    "software_versions": {
+      "python": "3.13.18",
+      "sympy": "1.14.0",
+      "mpmath": "1.3.0"
+    },
+    "certificate_file": "01_lower_endpoint/certificate/lower_endpoint_certificate.json",
+    "certificate_sha256_note": "computed over this file with this field set to the empty string, then inserted below",
+    "certificate_sha256": "4b790e3954f1e27cbdd0c256333f7b223f51aa9bf3a90573ce511b05fc869be6"
+  }
+}
